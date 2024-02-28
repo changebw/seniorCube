@@ -1,0 +1,55 @@
+
+/* .SolvePage {
+    display: none;
+    visibility: hidden;
+} */
+
+/* .SolvePage {
+    display: flex;
+    flex-direction: row;
+    visibility: visible;
+    margin-top: 10px;
+} */
+
+.SolvePage button {
+    width: 20vw;
+    height: 10vh;
+}
+
+.SolvePage button:hover {
+    cursor: pointer;
+}
+
+.ButtonContainer {
+    width: 50%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.SolvePage #SolveButton {
+    background-color: yellow;
+    border: solid 5px rgb(186, 186, 15);
+    border-radius: 0.5;
+}
+
+.SolvePage #SolveButton:hover {
+    background-color: rgb(170, 170, 3);
+    border: solid 5px rgb(118, 118, 4);
+}
+
+.SolvePage #ScrambleButton {
+    background-color: green;
+    color: white;
+    border: solid 5px rgb(2, 84, 2);
+    border-radius: 0.5;
+}
+
+.SolvePage #ScrambleButton:hover {
+    background-color: rgb(1, 94, 1);
+    border: solid 5px rgb(1, 72, 1);
+}

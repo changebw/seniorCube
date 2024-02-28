@@ -1,0 +1,40 @@
+.Navbar {
+    display: grid;
+    height: 5vh;
+    width: 100%;
+    grid-template-columns: repeat(4, 25%);
+}
+
+.NavbarLink {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: green;
+    border: solid 1px white;
+    border-top: none;
+    border-bottom: none;
+    width: 100%;
+    height: 100%;
+    font-size: 30px;
+    color: white;
+    text-decoration: none;
+}
+
+.NavbarLink.first {
+    border-left: none;
+}
+
+.NavbarLink.last {
+    border-right: none;
+}
+
+.NavbarLink-title {
+    margin: 0;
+    padding: 0;
+}
+
+.NavbarButton:hover {
+    color: rgb(198, 198, 198);
+    cursor: pointer;
+    background-color: rgb(1, 76, 1);
+}

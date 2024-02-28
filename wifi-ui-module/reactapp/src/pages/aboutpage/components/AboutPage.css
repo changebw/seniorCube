@@ -1,0 +1,8 @@
+
+
+.AboutPage {
+    display: flex;
+    flex-direction: row;
+    visibility: visible;
+    margin-top: 10px;
+}

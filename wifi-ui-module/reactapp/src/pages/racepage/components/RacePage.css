@@ -1,0 +1,48 @@
+
+
+.RacePage {
+    display: flex;
+    flex-direction: column;
+    visibility: visible;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.plotsContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.plotContainer {
+    background-color: rgb(250, 225, 225);
+    text-align: center;
+}
+
+.graphButton {
+    width: 25%;
+    height: 4vh;
+    border: solid 1px black;
+    color: white;
+    font-weight: bold;
+}
+
+.graphButton:hover {
+    cursor: pointer;
+}
+
+#startGraph {
+    background-color: green;
+}
+#stopGraph {
+    background-color: red;
+}
+
+#startGraph:hover {
+    background-color: rgb(1, 81, 1);
+}
+#stopGraph:hover {
+    background-color: rgb(172, 5, 5);
+}

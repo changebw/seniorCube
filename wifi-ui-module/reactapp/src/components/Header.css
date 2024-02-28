@@ -1,0 +1,29 @@
+.Header {
+    color: white;
+    background-color: red;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.grayed {
+    background-color: gray;
+}
+
+.Header h2 {
+    margin: 0;
+    font-size: 40px;
+}
+
+.ConnectionsContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.connForm {
+    display: flex;
+    flex-direction: column;
+}
+
