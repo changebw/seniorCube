@@ -1,8 +1,0 @@
-•	Able to communicate from web server to Arduino UNO through ESP8266-01 chip server
-o	Can configure ESP8266-01 to host a server for receiving commands
-o	Web server can send two unique dummy commands to the microcontroller
-o	Arduino Uno can complete an action based on command sent from web server (turn on LED)
-•	Basic user interface for solve page
-o	Button to establish connection with the device
-o	Notification to user that device is connected
-o	Buttons to send two unique dummy commands
