@@ -1,5 +1,7 @@
 .DS_Store
-
+wifi-ui-module/rubikssolverenv/bin
+wifi-ui-module/rubikssolverenv/include
+wifi-ui-module/rubikssolverenv/pyvenv.cfg
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 db.sqlite3
