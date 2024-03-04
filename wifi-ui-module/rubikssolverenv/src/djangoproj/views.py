@@ -26,3 +26,9 @@ def sendSolve(request):
 def closeConnection(request):
     close_connection(conn)
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
+
+def takeNewPicture(request):
+    bytes_data = listen_for_image(conn)
+    convert_bytes_to_image(bytes_data)
+    close_connection(conn)
+    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")

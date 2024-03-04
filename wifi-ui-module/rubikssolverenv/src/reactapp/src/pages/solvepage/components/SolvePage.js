@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./SolvePage.css"
+import outputImg from "./output.bmp"
 
 class SolvePage extends React.Component {
 
@@ -38,6 +39,13 @@ class SolvePage extends React.Component {
                               <h2>Solve</h2>
                             </button>
                           </form>
+                          <form id="takeNewPicture" className="connForm" action="" onSubmit={this.handleSubmit}>
+                            <button id="PicButton">
+                              <h2>Get pic</h2>
+                            </button>
+                          </form>
+                          {/* <img src={`${outputImg}?t=${new Date().getTime()}`} alt="bub" /> */}
+                        {/* <img src={`http://localhost:8000/${outputImg}`} alt="img would be here if it worked" /> */}
                         </div>
                       </div>
     }

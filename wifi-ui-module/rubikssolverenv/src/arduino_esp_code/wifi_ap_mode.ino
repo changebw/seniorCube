@@ -21,10 +21,10 @@ void setup() {
   Serial.println("set AP mode");
   delay(3000);
 
-  if (!WiFi.config(local_IP, gateway, subnet)) {
-    Serial.println("STA Failed to configure");
-    delay(1000);
-  }
+  // if (!WiFi.config(local_IP, gateway, subnet)) {
+  //   Serial.println("STA Failed to configure");
+  //   delay(1000);
+  // }
 
   Serial.println("Set static IP");
   delay(2000);
