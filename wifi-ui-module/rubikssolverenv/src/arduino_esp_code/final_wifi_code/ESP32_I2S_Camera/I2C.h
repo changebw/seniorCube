@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include "Log.h"
 
 class I2C
 {
@@ -110,6 +111,7 @@ class I2C
   {
     start();
     pushByte(addr);
+    DEBUG_PRINT(data);
     
     if(!getAck())
     {

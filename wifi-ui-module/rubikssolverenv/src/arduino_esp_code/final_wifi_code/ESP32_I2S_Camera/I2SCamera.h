@@ -15,6 +15,7 @@
 #include "rom/lldesc.h"
 #include "XClk.h"
 #include "DMABuffer.h"
+#include "Log.h"
 
 class I2SCamera
 {
@@ -82,6 +83,7 @@ class I2SCamera
   
   static void i2sStop();
   static void i2sRun();
+  static void printImageData();
 
   static void dmaBufferInit(int bytes);
   static void dmaBufferDeinit();

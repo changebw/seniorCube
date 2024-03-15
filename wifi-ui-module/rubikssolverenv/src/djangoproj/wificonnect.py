@@ -2,11 +2,11 @@ import socket
 import time
 from PIL import Image
 from io import BytesIO
-import numpy as np
 
 def make_connection() -> socket.socket:
     # ip = '192.168.1.165'#ip when using home network
-    ip = '172.20.10.9'#ip when using iphone hotspot
+    # ip = '192.168.1.210'#ip when using iphone hotspot
+    ip = '172.20.10.10'
     port = 80 #port used in esp setup
     
     conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19,6 +19,8 @@ def make_connection() -> socket.socket:
         print("no connection") # fail conditions
         conn.close()
         return "err"
+    
+    print("success")
     
     return conn
 
@@ -51,43 +53,92 @@ def receiveTextViaSocket(conn):
     print("Received msg: ", msg)
     encodedAck = bytes('text_received','utf-8')
     conn.sendall(encodedAck)
-    
+
 def listen_for_image(conn):
-    conn.send("GET /camera".encode())
-    part = conn.recv(50)
-    print(f"{part}\n\n\n")
-    while 'donesetup' not in part.decode('ISO-8859-1'):
-        part = conn.recv(50)
-        print(f"{part}\n\n\n")        
-    print(part)
+
+    size_nxt = int(conn.recv(2)) #size
+    conn.recv(2) # newline chars
+    
+    print(size_nxt)
+    part = conn.recv(size_nxt) #get msg
+    conn.recv(2) # newline chars
+    print(f"{part}\n\n")
+    conn.send("ackResponse\r\n".encode())
+    
+    size_nxt = int(conn.recv(2)) #size
+    conn.recv(2) # newline chars
+    
+    print(size_nxt)
+    part = conn.recv(size_nxt) #get msg
+    conn.recv(2) # newline chars
+    print(f"{part}\n\n")
+    conn.send("ackContentType\r\n".encode())
+
+    size_nxt = int(conn.recv(2)) #size
+    conn.recv(2) # newline chars
+    
+    print(size_nxt)
+    part = conn.recv(size_nxt) #get msg
+    conn.recv(2) # newline chars
+    print(f"{part}\n\n")
+    # conn.send("ackConnection\r\n".encode())
+
+    # size_nxt = int(conn.recv(2)) #size
+    # conn.recv(2) # newline chars
+    
+    # print(size_nxt)
+    # part = conn.recv(size_nxt) #get msg
+    # conn.recv(2) # newline chars
+    # print(f"{part}\n\n")
+    conn.send("ackSetupDone\r\n".encode())
+
+    # size_bmp = int(conn.recv(2)) #size
+    # conn.recv(2) #newline chars
+
+    # print("size bmp head: ",size_bmp)
+    # bmp_head = conn.recv(size_bmp)
+    # conn.recv(2) #newline
+    # print(f"{bmp_head}\n\n")
+    # conn.send("ackGotBMP\r\n".encode())
+
+    # size_img = int(conn.recv(2))
+    # conn.recv(2)
+
+    # print(print("size img: ",size_img))
+    # bytes_data = conn.recv(100)
+    # conn.recv(2)
+    # print(f"{part}\n\n")
+    # conn.send("ackGotImage".encode())
+
+
     bytes_data = conn.recv(2048)
-    part = bytes_data
-    i = 1
-    print("START IMAGE\n\n")
-    while 'sent' not in part.decode('ISO-8859-1'):
-        print(f"{part}\n\n\n")
+
+    while True:
         part = conn.recv(2048)
-        bytes_data += part 
-        i += 1
+        bytes_data += part
+        if b'sent' in part:
+            break
+
+        bytes_data = bytes_data.replace(b'sent', b'')
+    
     return bytes_data
 
 def convert_bytes_to_image(byte_data):
     byte_stream = BytesIO(byte_data)
-    image = Image.frombuffer('RGB', (160, 120), byte_stream.read(), 'raw', 'BGR;16', 0, 1)
-    # image.save("output.bmp", format="BMP")
-    image.save("./djangoproj/media/output.bmp", format="BMP")
-    # image.show()
+    try:
+        image = Image.open(byte_stream)
+        image.save("./djangoproj/media/output.bmp", format="BMP")
+    except Exception as e:
+        print("Error processing image:", e)
 
 ### uncomment for debugging receive image
+conn = make_connection()
+conn.send("GET /camera HTTP/1.1\r\n".encode())
 
-# conn = make_connection()
-# conn.send("GET /camera".encode())
+byte_data = listen_for_image(conn)
+convert_bytes_to_image(byte_data)
 
-
-# byte_data = listen_for_image(conn)
-# convert_bytes_to_image(byte_data)
-
-# conn.close()
+conn.close()
 
 ### uncomment for debugging send message
 

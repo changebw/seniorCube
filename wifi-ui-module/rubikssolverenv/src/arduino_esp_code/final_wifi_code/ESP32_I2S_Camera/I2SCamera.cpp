@@ -21,6 +21,19 @@ int I2SCamera::framePointer = 0;
 int I2SCamera::frameBytes = 0;
 volatile bool I2SCamera::stopSignal = false;
 
+void I2SCamera::printImageData() {
+  DEBUG_PRINTLN("Image Data:");
+
+  for (int i = 0; i < frameBytes; i++) {
+    if (i > 0 && i % 16 == 0) {
+      DEBUG_PRINTLN();
+    }
+    DEBUG_PRINT(String(frame[i], HEX) + " ");
+  }
+
+  DEBUG_PRINTLN();
+}
+
 void IRAM_ATTR I2SCamera::i2sInterrupt(void* arg)
 {
     I2S0.int_clr.val = I2S0.int_raw.val;
@@ -67,7 +80,7 @@ void I2SCamera::i2sStop()
 
 void I2SCamera::i2sRun()
 {
-    DEBUG_PRINTLN("I2S Run");
+    // DEBUG_PRINTLN("I2S Run");
     while (gpio_get_level(vSyncPin) == 0);
     while (gpio_get_level(vSyncPin) != 0);
 
@@ -76,12 +89,14 @@ void I2SCamera::i2sRun()
     blocksReceived = 0;
     dmaBufferActive = 0;
     framePointer = 0;
-    DEBUG_PRINT("Sample count ");
-    DEBUG_PRINTLN(dmaBuffer[0]->sampleCount());
+    // DEBUG_PRINT("Sample count ");
+    // DEBUG_PRINTLN(dmaBuffer[0]->sampleCount());
     I2S0.rx_eof_num = dmaBuffer[0]->sampleCount();
     I2S0.in_link.addr = (uint32_t)&(dmaBuffer[0]->descriptor);
     I2S0.in_link.start = 1;
     I2S0.int_clr.val = I2S0.int_raw.val;
+    // DEBUG_PRINTLN("Raw value: ");
+    // DEBUG_PRINT(I2S0.int_raw.val);
     I2S0.int_ena.val = 0;
     I2S0.int_ena.in_done = 1;
     esp_intr_enable(i2sInterruptHandle);
@@ -91,7 +106,7 @@ void I2SCamera::i2sRun()
 
 bool I2SCamera::initVSync(int pin)
 {
-  DEBUG_PRINT("Initializing VSYNC... ");
+  // DEBUG_PRINT("Initializing VSYNC... ");
   vSyncPin = (gpio_num_t)pin;
   gpio_set_intr_type(vSyncPin, GPIO_INTR_POSEDGE);
   gpio_intr_enable(vSyncPin);

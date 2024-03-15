@@ -9,13 +9,13 @@ OV7670::OV7670(Mode m, const int SIOD, const int SIOC, const int VSYNC, const in
   
   pinMode(VSYNC, INPUT);
 
-  DEBUG_PRINT("Before first VSYNC loop");
+  // DEBUG_PRINT("Before first VSYNC loop");
   while (!digitalRead(VSYNC));
-  DEBUG_PRINTLN("Exited first VSYNC loop");
+  // DEBUG_PRINTLN("Exited first VSYNC loop");
 
-  DEBUG_PRINT("Before second VSYNC loop");
+  // DEBUG_PRINT("Before second VSYNC loop");
   while (digitalRead(VSYNC));
-  DEBUG_PRINTLN("Exited second VSYNC loop");
+  // DEBUG_PRINTLN("Exited second VSYNC loop");
 
   mode = m;
   switch(mode)
