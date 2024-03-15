@@ -1,11 +1,13 @@
 import numpy as np
+import random
 import copy
 
 class Cube:
     def __init__(self) -> None:
         self.sides = np.array([[['w', 'w', 'w'],['w', 'w', 'w'],['w','w','w']], [['r', 'r', 'r'],['r', 'r', 'r'],['r','r','r']], [['b', 'b', 'b'],['b', 'b', 'b'],['b','b','b']],
                       [['o', 'o', 'o'],['o', 'o', 'o'],['o','o','o']], [['g', 'g', 'g'],['g', 'g', 'g'],['g','g','g']], [['y', 'y', 'y'],['y', 'y', 'y'],['y','y','y']]])
-        self.scramble = []
+        self.scramble = ""
+        self.moves = "rlfbduRLFBUD"
 
     def input(self, sides):
         self.sides = sides
@@ -17,23 +19,32 @@ class Cube:
     def turnCube(self, turns):
         self.scramble = turns
         for turn in turns:
-            letter = turn[0].lower()
-            num = int(turn[1])
-            print(letter, num)
-            match letter:
+            match turn:
                 case 'r':
-                    self.turnRight(num)
+                    self.turnRight(3)
                 case 'l':
-                    self.turnLeft(num)
+                    self.turnLeft(3)
                 case 'f':
-                    self.turnFront(num)
+                    self.turnFront(3)
                 case 'b':
-                    self.turnBack(num)
+                    self.turnBack(3)
                 case 'd':
-                    self.turnDown(num)
+                    self.turnDown(3)
                 case 'u':
-                    self.turnUp(num)
-            self.printCube()
+                    self.turnUp(3)
+                case 'R':
+                    self.turnRight(1)
+                case 'L':
+                    self.turnLeft(1)
+                case 'F':
+                    self.turnFront(1)
+                case 'B':
+                    self.turnBack(1)
+                case 'D':
+                    self.turnDown(1)
+                case 'U':
+                    self.turnUp(1)
+            #self.printCube()
             
     #5,i,2 -> 3,2-i,0
     #3,2-i,2 -> 5,i,0
@@ -100,3 +111,12 @@ class Cube:
 
     def solve(self):
         scramble = copy.deepcopy(self.scramble)
+
+    def randomScramble(self, moveCount):
+        scramble = ""
+        for x in range(moveCount):
+            scramble += random.choice(self.moves)
+        return scramble
+
+    def reverseMoves(self, moves):
+        return moves.swapcase()[::-1]
