@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from django.contrib import admin
-from djangoproj.views import index,sendScramble,sendSolve,makeConnection,closeConnection,takeNewPicture
+from djangoproj.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,11 +26,13 @@ urlpatterns = [
     path('about', index, name='index'), #connect to diff react pages, all go to index since this is a SPA
     path('race', index, name='index'),
     path('learn', index, name='index'),
-    path("makeConnection", makeConnection, name='index'),
     path("sendScramble", sendScramble),
     path("sendSolve", sendSolve),
-    path("closeConnection", closeConnection),
-    path("takeNewPicture", takeNewPicture),
+    # path("makeConnection/<int:esp_id>/", makeConnection),
+    path("startTimerConnection", startTimerConnection),
+    # path("closeConnection", closeConnection),
+    # path("takeNewPicture", takeNewPicture),
+    path("getTime", getTime)
 ]
 
 if settings.DEBUG:

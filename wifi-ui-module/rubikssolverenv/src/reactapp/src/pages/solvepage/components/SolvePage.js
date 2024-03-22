@@ -1,7 +1,6 @@
 import React from "react";
 
 import "./SolvePage.css"
-import outputImg from "./output.bmp"
 
 class SolvePage extends React.Component {
 
@@ -9,7 +8,7 @@ class SolvePage extends React.Component {
         e.preventDefault();
         try {
             const csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
-            const fetchString = "/" + e.target.id
+            const fetchString = "/" + e.target.id // build fetch string based on button ID
             const response = await fetch(fetchString, {
                 method: 'POST',
                 headers: {
@@ -19,7 +18,7 @@ class SolvePage extends React.Component {
             });
 
             if (response.ok) {
-                console.log("success");
+                console.log("Successfully sent data to ESP.");
             } else {
                 console.error('Failed to make connection');
             }
@@ -39,13 +38,11 @@ class SolvePage extends React.Component {
                               <h2>Solve</h2>
                             </button>
                           </form>
-                          <form id="takeNewPicture" className="connForm" action="" onSubmit={this.handleSubmit}>
+                          {/* <form id="takeNewPicture" className="connForm" action="" onSubmit={this.handleSubmit}>
                             <button id="PicButton">
                               <h2>Get pic</h2>
                             </button>
-                          </form>
-                          {/* <img src={`${outputImg}?t=${new Date().getTime()}`} alt="bub" /> */}
-                        {/* <img src={`http://localhost:8000/${outputImg}`} alt="img would be here if it worked" /> */}
+                          </form> */}
                         </div>
                       </div>
     }

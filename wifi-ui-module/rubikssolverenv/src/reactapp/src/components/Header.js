@@ -50,7 +50,7 @@ class Header extends React.Component {
     render() {
         return  <header className="Header">
                     <h2>Rubik's Cube Solver Control Center</h2>
-                    <div className="ConnectionsContainer">
+                    {/* <div className="ConnectionsContainer">
                         <div className="formsContainer">
                             <form id="makeConnection" className="connForm" action="" onSubmit={this.handleSubmit}>
                                 <h4 id="title">No device detected</h4>
@@ -64,7 +64,7 @@ class Header extends React.Component {
                                 <button className="grayed">Close Connection</button>
                             </form>
                         </div>
-                    </div>
+                    </div> */}
                 </header>;
     }
 

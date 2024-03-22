@@ -3,12 +3,8 @@
  Which was originally modified from https://github.com/igrr/esp32-cam-demo
 */
 
-#include <base64.hpp>
-
 #include "OV7670.h"
-
 #include <WiFi.h>
-#include <WiFiMulti.h>
 #include <WiFiClient.h>
 #include "BMP.h"
 
@@ -31,58 +27,75 @@ const int D6 = 12;
 const int D7 = 4;
 
 const char* ssid = "XXX";
-const char* password = "XXXXX";
+const char* password = "XXX";
 
 OV7670 *camera;
 
 WiFiServer server(80);
 
+// Static IP setup
+IPAddress local_IP(172,20,10,9);
+IPAddress gateway(172,20,10,1);
+IPAddress subnet(255, 255, 255, 240);
+IPAddress primaryDNS(8, 8, 8, 8);
+IPAddress secondaryDNS(8, 8, 4, 4);
+
 unsigned char bmpHeader[BMP::headerSize];
 
-void setup() 
-{
+void setup() {
+  espAndCameraSetup();
+}
+
+void espAndCameraSetup() {
   Serial.begin(115200);
 
-  Serial.println("setting STA mode");
-
+  Serial.println("Setting STA mode...");
   WiFi.mode(WIFI_STA);
-  Serial.println("done setting STA mode");
-  delay(1000);
+  delay(100);
+  Serial.println("Done");
 
-  WiFi.begin(ssid, password);
-  delay(1000);
+  Serial.println("Setting static IP address...");
 
-  while (WiFi.status() != WL_CONNECTED){
-    delay(1000);
-    Serial.println("waiting...");
+  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)){
+    Serial.println("STA Static IP failed to configure.");
+  }
+  else {
+    Serial.println("STA Static IP configured successfully.");
   }
 
-  Serial.println("connected");
+  Serial.println("Connecting to WiFi network...");
+  WiFi.begin(ssid, password);
 
-  delay(1000);
+  while (WiFi.status() != WL_CONNECTED){
+    delay(100);
+    Serial.println("Connecting...");
+  }
+
+  Serial.println("Successfully Connected to WiFi with IP:");
   Serial.println(WiFi.localIP());
-  delay(1000);
+  delay(100);
   
+  Serial.println("Initializing OV7670 and BMP Header...");
   camera = new OV7670(OV7670::Mode::QQVGA_RGB565, SIOD, SIOC, VSYNC, HREF, XCLK, PCLK, D0, D1, D2, D3, D4, D5, D6, D7);
-
   BMP::construct16BitHeader(bmpHeader, camera->xres, camera->yres);
+  Serial.println("Done.");
   
+  Serial.println("Starting server...");
   server.begin();
+  Serial.println("Done.");
 }
 
 
-void loop()
-{
+void loop() {
   serve();
 }
 
-void serve()
-{
+void serve() {
   WiFiClient client = server.available();
-  if (client) 
-  {
+  if (client) {
     Serial.println("New Client connected");
     String currentLine = "";
+    bool sent = false;
     while (client.connected()) 
     {
       if (client.available()) 
@@ -126,11 +139,12 @@ void serve()
           client.write(bmpHeader,BMP::headerSize);
           client.write(camera->frame, camera->xres * camera->yres*2);
           client.write("sent");
+          sent = true;
         }
       }
     }
     // close the connection:
-    if (client) {
+    if (client && sent) {
       client.stop();
     }
     Serial.println("Client Disconnected.");
