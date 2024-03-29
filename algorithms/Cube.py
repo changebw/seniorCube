@@ -26,6 +26,7 @@ class Cube:
 
     def unscrambled(self):
         self.cube = [[[s for x in range(3)] for y in range(3)] for s in self.colors]
+        print(self.cube)
         self.scramble = ""
 
     def printCube(self):

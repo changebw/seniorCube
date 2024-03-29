@@ -4,18 +4,18 @@ import numpy as np
 #topview.jpg
 orangePixels = [( 142 , 58 ) ,( 156 , 78 ) ,( 174 , 103 ) ,( 162 , 64 ) ,( 176 , 81 ) ,( 191 , 102 ) ,( 177 , 67 ) ,( 191 , 83 ) ,( 209 , 104 )]
 greenPixels = [( 174 , 124 ) ,( 153 , 144 ) ,( 136 , 164 ) ,( 192 , 122 ) ,( 174 , 142 ) ,( 158 , 160 ) ,( 208 , 121 ) ,( 191 , 140 ) ,( 175 , 155 )]
-whitePixels = [( 100 , 108 ) ,( 108 , 128 ) ,( 121 , 153 ) ,( 111 , 89 ) ,( 124 , 100 ) ,( 137 , 133 ) ,( 125 , 64 ) ,( 138 , 86 ) ,( 153 , 112 )]
+whitePixels = [( 153 , 111 ) , ( 138 , 89 ) , ( 125 , 68 ) , ( 137 , 134 ) , ( 130 , 110 ) , ( 112 , 87 ) , ( 122 , 153 ) , ( 110 , 128 ) , ( 100 , 107 )]
 
 #botview.jpg
 redPixels = [( 101 , 73 ) ,( 86 , 87 ) ,( 64 , 103 ) ,( 126 , 73 ) ,( 114 , 87 ) ,( 96 , 103 ) ,( 158 , 70 ) ,( 145 , 85 ) ,( 130 , 103 )]
 bluePixels = [( 59 , 128 ) ,( 72 , 156 ) ,( 83 , 183 ) ,( 91 , 129 ) ,( 100 , 158 ) ,( 113 , 186 ) ,( 128 , 127 ) ,( 136 , 161 ) ,( 143 , 189 )]
-yellowPixels = [( 150 , 117 ) ,( 160 , 149 ) ,( 166 , 180 ) ,( 163 , 98 ) ,( 168 , 128 ) ,( 175 , 155 ) ,( 171 , 83 ) ,( 175 , 112 ) ,( 180 , 138 )]
+yellowPixels = [( 171 , 83 ) , ( 163 , 96 ) , ( 149 , 116 ) , ( 176 , 113 ) , ( 170 , 127 ) , ( 160 , 148 ) , ( 183 , 136 ) , ( 174 , 155 ) , ( 167 , 179 )]
 
 topPixels = [orangePixels, greenPixels, whitePixels]
 botPixels = [redPixels, bluePixels, yellowPixels]
 
-fileName = 'topview.jpg'
-botFile = 'botView.jpg'
+fileName = 'CV/topview.jpg'
+botFile = 'CV/botview.jpg'
 
 initialImage = cv2.imread(fileName)
 botImage = cv2.imread(botFile)
@@ -72,11 +72,11 @@ def allFaces(im1, im2, topPixels, botPixels):
 
     for pixelList in topPixels:
         faces = pixelColor(im1, im2, pixelList)
-        faceList.append(np.array(faces))
+        faceList.append(list(np.array(faces)))
 
     for pixels in botPixels:
         faces = pixelColor(im2, im1, pixels)
-        faceList.append(np.array(faces))
+        faceList.append(list(np.array(faces)))
 
     return faceList
 
@@ -88,6 +88,8 @@ def allFaces(im1, im2, topPixels, botPixels):
 #yellowFace = pixelColor(hsvBot, im2, yellowPixels)
 
 faceList = allFaces(hsvIm, hsvBot, topPixels, botPixels)
+
+print(faceList)
 
 print('Orange:', faceList[0])
 print('Green:', faceList[1])
