@@ -4,7 +4,14 @@ import time
 
 from algorithms.Cube import Cube
 from algorithms.solver import IDA_star, build_heuristic_db
-#from CV.colorByFace import {class name}
+from CV.colorByFace import colorByFace
+
+pixelDetector = colorByFace('CV/topview.jpg', 'CV/botview.jpg')
+hsvIm, hsvBot, im2 = pixelDetector.processImages()
+topPixels = pixelDetector.getTopPixels()
+botPixels = pixelDetector.getBotPixels()
+
+faceList = pixelDetector.allFaces(hsvIm, hsvBot, topPixels, botPixels)
 
 MAX_MOVES = 7
 NEW_HEURISTICS = False
