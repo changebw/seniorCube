@@ -73,6 +73,16 @@ def send_solve(conn):
         conn.send("solve\0".encode())
         conn.close()
 
+def send_learn_solve(conn: socket.socket, moves: str):
+    if conn != "err":
+        while len(moves) > 0:
+            try: 
+                conn.send(moves[0].encode())
+            except TimeoutError or OSError:
+                print("SEND FAILED! exiting..")
+                break
+            moves = moves[1:]
+
 def receiveTextViaSocket(conn):
     encoded = conn.recv(20)
     if not encoded:
