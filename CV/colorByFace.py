@@ -6,19 +6,6 @@ class colorByFace:
         self.fileName = fileName
         self.botFile = botFile
 
-    def getTopPixels(self):
-        whitePixels = [( 124 , 110 ) ,( 131 , 128 ) ,( 138 , 149 ) ,( 133 , 95 ) ,( 146 , 114 ) ,( 149 , 134 ) ,( 143 , 76 ) ,( 152 , 97 ) ,( 162 , 118 )]
-        redPixels = [(158, 69),(169, 88),(178, 108),(180, 71),(189, 91),(201, 111),(200, 75),(206, 91),(218, 113)]
-        bluePixels = [( 176 , 129 ) ,( 164 , 146 ) ,( 150 , 161 ) ,( 199 , 130 ) ,( 183 , 145 ) ,( 171 , 158 ) ,( 219 , 130 ) ,( 202 , 144 ) ,( 188 , 158 )]
-        return [whitePixels, redPixels, bluePixels]
-
-
-    def getBotPixels(self):
-        yellowPixels = [( 165 , 109 ) ,( 174 , 139 ) ,( 184 , 166 ) ,( 178 , 93 ) ,( 183 , 128 ) ,( 193 , 149 ) ,( 188 , 83 ) ,( 196 , 111 ) ,( 201 , 135 )]
-        orangePixels = [( 128 , 83 ) ,( 113 , 93 ) ,( 97 , 104 ) ,( 151 , 79 ) ,( 137 , 89 ) ,( 122 , 101 ) ,( 173 , 75 ) ,( 162 , 85 ) ,( 150 , 98 )]
-        greenPixels = [( 96 , 122 ) ,( 105 , 148 ) ,( 116 , 173 ) ,( 118 , 121 ) ,( 129 , 147 ) ,( 139 , 174 ) ,( 146 , 118 ) ,( 157 , 149 ) ,( 164 , 174 )]
-        return [yellowPixels, orangePixels, greenPixels]
-
     def processImages(self):
         initialImage = cv2.imread(self.fileName)
         botImage = cv2.imread(self.botFile)
@@ -66,8 +53,22 @@ class colorByFace:
         print(pixelVals)
         return face
 
-    def allFaces(self, im1, im2, topPixels, botPixels):
+    def allFaces(self):
         faceList = []
+
+        im1, im2, _ = pixelDetector.processImages()
+
+        whitePixels = [( 124 , 110 ) ,( 131 , 128 ) ,( 138 , 149 ) ,( 133 , 95 ) ,( 146 , 114 ) ,( 149 , 134 ) ,( 143 , 76 ) ,( 152 , 97 ) ,( 162 , 118 )]
+        redPixels = [(158, 69),(169, 88),(178, 108),(180, 71),(189, 91),(201, 111),(200, 75),(206, 91),(218, 113)]
+        bluePixels = [( 176 , 129 ) ,( 164 , 146 ) ,( 150 , 161 ) ,( 199 , 130 ) ,( 183 , 145 ) ,( 171 , 158 ) ,( 219 , 130 ) ,( 202 , 144 ) ,( 188 , 158 )]
+
+        topPixels = [whitePixels, redPixels, bluePixels]
+
+        yellowPixels = [(165, 109), (174, 139), (184, 166), (178, 93), (183, 128), (193, 149), (188, 83), (196, 111), (201, 135)]
+        orangePixels = [(128, 83), (113, 93), (97, 104), (151, 79), (137, 89), (122, 101), (173, 75), (162, 85), (150, 98)]
+        greenPixels = [(96, 122), (105, 148), (116, 173), (118, 121), (129, 147), (139, 174), (146, 118), (157, 149),(164, 174)]
+
+        botPixels = [yellowPixels, orangePixels, greenPixels]
 
         for pixelList in topPixels:
             faces = self.pixelColor(im1, im2, pixelList)
@@ -87,12 +88,7 @@ class colorByFace:
 
 if __name__ == "__main__":
     pixelDetector = colorByFace('topview.jpg', 'botview.jpg')
-    hsvIm, hsvBot, im2 = pixelDetector.processImages()
-    topPixels = pixelDetector.getTopPixels()
-    botPixels = pixelDetector.getBotPixels()
-
-    faceList = pixelDetector.allFaces(hsvIm, hsvBot, topPixels, botPixels)
-
+    faceList = pixelDetector.allFaces()
 
     print('White:', faceList[0])
     print('Red:', faceList[1])
@@ -101,9 +97,9 @@ if __name__ == "__main__":
     print('Orange:', faceList[4])
     print('Green:', faceList[5])
 
-    cv2.imshow('HsvBot', hsvBot)
-    cv2.imshow('Im2', im2)
-    cv2.imshow('HsvTop', hsvIm)
+    #cv2.imshow('HsvBot', hsvBot)
+    #cv2.imshow('Im2', im2)
+    #cv2.imshow('HsvTop', hsvIm)
 
     plainBot = cv2.imread(pixelDetector.botFile)
     plainTop = cv2.imread(pixelDetector.fileName)
