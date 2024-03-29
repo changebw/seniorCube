@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from djangoproj.wificonnect import *
 from django.views.decorators.csrf import get_token
 import serial,time
+from djangoproj.Cube import Cube
 
 # def closeConnection(request):
 #     close_connection(conn)
@@ -23,11 +24,15 @@ def sendScramble(request):
     # TODO: Implement the scramble
 
     # CONNECT TO ESP32 MOTOR CONTROLLER
-    conn = make_connection("motors")
+    conn = make_connection("cam1")#change to motors later
     # TODO: CALL BRADEN's SCRAMBLE ALGORITHM
+    cube = Cube()
+    cube.printCube()
+    moves = cube.randomScramble(20)
+    
     # TODO: IF NOT ALREADY PARSED, CALL PARSING FUNCTION
     # SEND STRING DATA for scramble algorithm and DISCONNECT
-    send_scramble(conn)
+    send_scramble(conn, moves)
 
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
 
@@ -83,8 +88,45 @@ def startTimerConnection(request):
 
 def getTime(request):
     rec_data = listen_for_time(timerConn)#user's time received from esp8266-01
-    data = {
-        'yourTime' : rec_data,
-        'robotTime' : 'hellofromdjango',
-    }
-    return JsonResponse(data)
+
+    if rec_data == "error":
+        return JsonResponse({},status=500)
+    else: 
+        data = {
+            'yourTime' : rec_data,
+            'robotTime' : 'hellofromdjango',
+        }
+        return JsonResponse(data,status=200)
+
+def startLearnModeConnection(request):
+    # TODO: Connect to cam1
+    # SEND REQUEST FOR IMAGE
+    # WAIT FOR IMAGE DATA TO BE RECEIVED
+    # SAVE IMAGE TO BMP
+    # TODO: Connect to cam1
+    # SEND REQUEST FOR IMAGE
+    # WAIT FOR IMAGE DATA TO BE RECEIVED
+    # SAVE IMAGE TO BMP
+
+    # CV PROCESSES IMAGES AND SENDS ARR TO SOLVE
+    # SOLVE PRODUCES SOLVESTRING
+
+    # GET SOLVE STRING
+    # MAKE IT GLOBAL
+
+    # CONNECT TO MOTORS
+    
+    global learnConn
+
+    learnConn = make_connection("motors")
+
+    if timerConn == "err": 
+        print("Failed to establish connection with ESP","motors")
+        status = 500 # Internal Server Error
+    else: 
+        status = 200 # OK
+    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""",status=status)
+
+def sendMove(request):
+    # SEND MOVE EACH TIME THE USER CLICKS "NEXT"
+    # learnConn.send()

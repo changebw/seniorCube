@@ -3,6 +3,7 @@ import time
 from PIL import Image
 from io import BytesIO
 import random
+from datetime import datetime
 
 '''
 |===== ESP32 INTERFACING INFO =====|
@@ -52,9 +53,19 @@ def make_connection(esp_id: str) -> socket.socket:
     
     return conn
 
-def send_scramble(conn):
+def send_scramble(conn: socket.socket, moves: str):
     if conn != "err":
-        conn.send("scramble\0".encode())
+        conn.send("POST /scramble HTTP/1.1\r\n".encode())
+        print("send req")
+        response_size = conn.recv(2) # size
+        response = conn.recv(17)
+        print("RESPONSE IS: " + str(response))
+        if b'HTTP/1.1 200 OK' in response:
+            print("good response")
+            move_string = moves + "SENTSCRAMBLE\r\n"
+            print(move_string)
+            conn.send(move_string.encode())
+            time.sleep(1)
         conn.close()
 
 def send_solve(conn):
@@ -117,10 +128,10 @@ def listen_for_image(conn):
 
 def convert_and_save_image(byte_data):
     byte_stream = BytesIO(byte_data)
-    rand_num = random.randint(0,100)
+    now = datetime.now()
     try:
         image = Image.open(byte_stream)
-        image.save(f"./djangoproj/media/output{rand_num}.bmp", format="BMP")
+        image.save(f"./djangoproj/media/output{now}.bmp", format="BMP")
     except Exception as e:
         print("Error processing image:", e)
 
@@ -130,13 +141,9 @@ def listen_for_time(conn):
     encoded = ""
 
     try: 
-        encoded = conn.recv(2)
+        encoded = conn.recv(8)
     except (OSError,TimeoutError) as e:
         encoded = "err"
-
-    if not encoded:
-        print("error, recieved None")
-        return None
     
     msg = "error"
     
@@ -149,11 +156,11 @@ def listen_for_time(conn):
 
 
 ### uncomment for debugging receive image
-# conn = make_connection()
+# conn = make_connection("cam1")
 # conn.send("GET /camera HTTP/1.1\r\n".encode())
 
 # byte_data = listen_for_image(conn)
-# convert_bytes_to_image(byte_data)
+# convert_and_save_image(byte_data)
 
 # conn.close()
 

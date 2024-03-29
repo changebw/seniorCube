@@ -7,6 +7,7 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include "BMP.h"
+#include <string>
 
 const int SIOD = 21; //SDA
 const int SIOC = 22; //SCL
@@ -108,6 +109,29 @@ void serve() {
           currentLine = "";
         }
         int msg_size = 0;
+
+        // Serial.println(currentLine);
+
+        // PASS TO ESP32_MOTORS code, keeping here for reference if needed
+        // if (currentLine.endsWith("POST /scramble HTTP/1.1")) {
+        //   Serial.println(currentLine);
+            
+        //   msg_size = strlen("HTTP/1.1 200 OK");
+        //   client.println(msg_size);
+        //   client.println("HTTP/1.1 200 OK");
+        // }
+
+        // if (currentLine.endsWith("SENTSCRAMBLE")) {
+        //   std::string moves = std::string(currentLine.c_str());
+        //   int startIdx = moves.find_first_of("S");
+        //   moves.erase(startIdx,12);
+        //   String moveString = "";
+        //   for (char c : moves){
+        //     moveString += c;
+        //   }
+        //   Serial.println("MOVES ARE: " + moveString);
+        // }
+
         if (currentLine.endsWith("GET /camera HTTP/1.1"))
         {
             Serial.println(currentLine);

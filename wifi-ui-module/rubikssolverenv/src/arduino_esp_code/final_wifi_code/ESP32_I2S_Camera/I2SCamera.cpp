@@ -200,7 +200,8 @@ bool I2SCamera::i2sInit(const int VSYNC, const int HREF, const int PCLK, const i
     I2S0.fifo_conf.dscr_en = 1;
     // FIFO configuration
     //two bytes per dword packing
-    I2S0.fifo_conf.rx_fifo_mod = SM_0A0B_0C0D;  //pack two bytes in one dword see :https://github.com/igrr/esp32-cam-demo/issues/29
+    // I2S0.fifo_conf.rx_fifo_mod = SM_0A0B_0C0D;  //pack two bytes in one dword see :https://github.com/igrr/esp32-cam-demo/issues/29
+    I2S0.fifo_conf.rx_fifo_mod = SM_0A0B_0C0D;
     I2S0.fifo_conf.rx_fifo_mod_force_en = 1;
     I2S0.conf_chan.rx_chan_mod = 1;
     // Clear flags which are used in I2S serial mode

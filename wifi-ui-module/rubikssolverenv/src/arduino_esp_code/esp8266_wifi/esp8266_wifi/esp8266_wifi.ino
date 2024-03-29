@@ -37,7 +37,7 @@ void loop() {
     Serial.println("GOT MSG:");
     Serial.println(msg);
   }
-  else if (msg == "GET /time\r\n"){
+  else if (msg == "GET /time\r\n" || msg == "GET /timd\r\n" || msg == "GET /tile\r\n" || msg == "GET /thme\r\n" || msg == "GDT /time\r\n"){
     int connectionId = 0;
     if (espSerial.find("+IPD,")){
       connectionId = espSerial.read()-48;
@@ -50,13 +50,13 @@ void loop() {
     cipSend += msg.length();
     cipSend += "\r\n";
 
-    sendData(cipSend, 50, true);
-    sendData(msg, 50, true);
+    sendData(cipSend, 5, true);
+    sendData(msg, 5, true);
   }
   else{
     if(msg != NULL){
-      Serial.println(msg);
-      delay(250);
+      Serial.println("MESSAGE IS:" + msg);
+      Serial.println("MESSSAGE WAS NOT GET TIME");
     }
   }
 }

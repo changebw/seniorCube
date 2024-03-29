@@ -7,9 +7,6 @@ class LearnPage extends React.Component{
                         <div className="instructionContainer">
                           <h1 className="instruction">R L F R2 L' F</h1>
                         </div>
-                        <div>
-                          <Three />
-                        </div>
                       </div>
     };
 

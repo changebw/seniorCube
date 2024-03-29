@@ -1,11 +1,11 @@
 #include <TM1637Display.h>
 #include <SoftwareSerial.h>
 
-SoftwareSerial espSerial(5,6);
+SoftwareSerial espSerial(2,3);
 
 // Pins for TM1637 display module
-#define CLK_PIN 2
-#define DIO_PIN 3
+#define CLK_PIN 5
+#define DIO_PIN 6
 
 // SSID AND PASS FOR WIFI
 #define ssid "XXX"
@@ -15,6 +15,7 @@ String fmsg;
 String msg;
 String response;
 String cmd;
+String sendString = "0:00";
 
 TM1637Display display(CLK_PIN, DIO_PIN);
 
@@ -32,7 +33,7 @@ void setup() {
   //Right hand sensor
   pinMode(right, INPUT_PULLUP);
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   espSerial.begin(115200);
   espSetup();
 
@@ -45,6 +46,7 @@ void setup() {
 }
 
 void loop() {
+
   if (!timing && (digitalRead(left) == LOW && digitalRead(right) == LOW)) {
     display.clear();
     display.showNumberDecEx(0, 0b01000000, true); // Display "00:00"
@@ -57,6 +59,7 @@ void loop() {
 
     starttime = millis();
     timing = true;
+    sendString = "0:00";
   }
 
   if (timing) {
@@ -70,25 +73,17 @@ void loop() {
     int displayValue = minutes * 100 + seconds;
     int hundredths = milliseconds / 10;
 
-    float sendValue = displayValue * 100 + hundredths;
+    String secondString = "";
 
-    if (espSerial.available()){
-      if (espSerial.find("+IPD,")){
-        delay(1000);
-        int connectionId = espSerial.read()-48;
-        String val = String(sendValue);
-        String cipSend = "AT+CIPSEND=";
-        cipSend += connectionId;
-        cipSend += ",";
-        cipSend += sizeof(val);
-        cipSend += "\r\n";
-
-        sendData(cipSend,1000,true);
-        sendData(val,1000,true);
-
-      }
+    if (seconds < 10) {
+      secondString = "0" + String(seconds);
+    }
+    else {
+      secondString = String(seconds);
     }
 
+    // float sendValue = displayValue * 100 + hundredths;
+    sendString = String(minutes) + ":" + secondString + "." + String(milliseconds);
 
     display.showNumberDecEx(displayValue * 100 + hundredths, 0b01000000, true); // Display elapsed time with hundredths of a second
 
@@ -106,6 +101,32 @@ void loop() {
       display.showNumberDecEx(0, 0b01000000, true);
     }
   }
+
+  while(espSerial.available()){
+      fmsg += (char)espSerial.read();
+      delay(2);
+  }
+  msg = getString(fmsg);
+  fmsg = "";
+
+  if (msg == "GET /time\r\n" || msg == "GET /timd\r\n" || msg == "GET /tile\r\n" || msg == "GET /thme\r\n" || msg == "GDT /time\r\n") {
+      Serial.println("RECEIVED FROM WEBPAGE: " + msg);
+      int connectionId = 0;
+      if (espSerial.find("+IPD,")){
+        connectionId = espSerial.read()-48;
+      }
+      String cipSend = "AT+CIPSEND=";
+      cipSend += connectionId;
+      cipSend += ",";
+      cipSend += sendString.length();
+      cipSend += "\r\n";
+
+      Serial.println("CIPSEND IS: " + cipSend);
+      Serial.println("SEND STRING IS: " + sendString);
+
+      sendData(cipSend, 50, true);
+      sendData(sendString, 50, true);
+    }
 }
 
 
