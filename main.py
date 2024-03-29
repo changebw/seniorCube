@@ -6,7 +6,7 @@ from algorithms.Cube import Cube
 from algorithms.solver import IDA_star, build_heuristic_db
 #from CV.colorByFace import {class name}
 
-MAX_MOVES = 8
+MAX_MOVES = 7
 NEW_HEURISTICS = False
 HEURISTIC_FILE = 'heuristic.json'
 
