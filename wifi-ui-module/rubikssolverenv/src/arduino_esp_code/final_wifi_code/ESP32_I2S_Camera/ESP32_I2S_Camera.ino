@@ -113,24 +113,61 @@ void serve() {
         // Serial.println(currentLine);
 
         // PASS TO ESP32_MOTORS code, keeping here for reference if needed
-        // if (currentLine.endsWith("POST /scramble HTTP/1.1")) {
-        //   Serial.println(currentLine);
+        if (currentLine.endsWith("POST /scramble HTTP/1.1")) {
+          Serial.println(currentLine);
             
-        //   msg_size = strlen("HTTP/1.1 200 OK");
-        //   client.println(msg_size);
-        //   client.println("HTTP/1.1 200 OK");
-        // }
+          msg_size = strlen("HTTP/1.1 200 OK");
+          client.println(msg_size);
+          client.println("HTTP/1.1 200 OK");
+        }
 
-        // if (currentLine.endsWith("SENTSCRAMBLE")) {
-        //   std::string moves = std::string(currentLine.c_str());
-        //   int startIdx = moves.find_first_of("S");
-        //   moves.erase(startIdx,12);
-        //   String moveString = "";
-        //   for (char c : moves){
-        //     moveString += c;
-        //   }
-        //   Serial.println("MOVES ARE: " + moveString);
-        // }
+        if (currentLine.endsWith("SENTSCRAMBLE")) {
+          std::string moves = std::string(currentLine.c_str());
+          int startIdx = moves.find_first_of("S");
+          moves.erase(startIdx,12);
+          String moveString = "";
+          for (char c : moves){
+            moveString += c;
+          }
+          Serial.println("MOVES ARE: " + moveString);
+        }
+        if (currentLine.endsWith("POST /solve HTTP/1.1")) {
+          Serial.println(currentLine);
+            
+          msg_size = strlen("HTTP/1.1 200 OK");
+          client.println(msg_size);
+          client.println("HTTP/1.1 200 OK");
+        }
+
+        if (currentLine.endsWith("SENTSOLVE")) {
+          std::string moves = std::string(currentLine.c_str());
+          int startIdx = moves.find_first_of("S");
+          moves.erase(startIdx,9);
+          String moveString = "";
+          for (char c : moves){
+            moveString += c;
+          }
+          Serial.println("MOVES ARE: " + moveString);
+        }
+
+        if (currentLine.endsWith("POST /move HTTP/1.1")) {
+          Serial.println(currentLine);
+            
+          msg_size = strlen("HTTP/1.1 200 OK");
+          client.println(msg_size);
+          client.println("HTTP/1.1 200 OK");
+        }
+
+        if (currentLine.endsWith("SENTMOVE")) {
+          std::string moves = std::string(currentLine.c_str());
+          int startIdx = moves.find_first_of("S");
+          moves.erase(startIdx,8);
+          String moveString = "";
+          for (char c : moves){
+            moveString += c;
+          }
+          Serial.println("MOVE IS: " + moveString);
+        }
 
         if (currentLine.endsWith("GET /camera HTTP/1.1"))
         {

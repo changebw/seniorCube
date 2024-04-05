@@ -20,6 +20,7 @@ const int stepPins[] = {22,26, 30, 34, 38};
 const int dirPins[] = {23, 27, 31, 35, 39};
 const int stepsPerRevolution = 200; // Number of steps per revolution for all motors
 
+//15-19, 2,4,8,5, 0
 // MOTORS
 // Motor 1: Left
 // Motor 2: Right
@@ -113,8 +114,6 @@ void serve() {
         }
         int msg_size = 0;
 
-        // Serial.println(currentLine);
-
         if (currentLine.endsWith("POST /scramble HTTP/1.1")) {
           Serial.println(currentLine);
             
@@ -132,41 +131,46 @@ void serve() {
             moveString += c;
           }
           Serial.println("MOVES ARE: " + moveString);
-
-          for (int i = 0; i < moveString.length(); i++){
-            if (moveString[i] == 'L'){
-              rotateMotor(1, 90);
-            }
-            else if (moveString[i] == 'l'){
-              rotateMotor(1, -90);
-            }
-            else if (moveString[i] == 'R'){
-              rotateMotor(2, 90);
-            }
-            else if (moveString[i] == 'r'){
-              rotateMotor(2, -90);
-            }
-            else if (moveString[i] == 'F'){
-              rotateMotor(3, 90);
-            }
-            else if (moveString[i] == 'f'){
-              rotateMotor(3, -90);
-            }
-            else if (moveString[i] == 'B'){
-              rotateMotor(4, 90);
-            }
-            else if (moveString[i] == 'b'){
-              rotateMotor(4, -90);
-            }
-            else if (moveString[i] == 'D' || moveString[i] == 'U'){
-              rotateMotor(5, 90);
-            }
-            else if (moveString[i] == 'd' || moveString[i] == 'u'){
-              rotateMotor(5, -90);
-            }
-            delay(2000);
-          }
         }
+        
+        if (currentLine.endsWith("POST /solve HTTP/1.1")) {
+          Serial.println(currentLine);
+            
+          msg_size = strlen("HTTP/1.1 200 OK");
+          client.println(msg_size);
+          client.println("HTTP/1.1 200 OK");
+        }
+
+        if (currentLine.endsWith("SENTSOLVE")) {
+          std::string moves = std::string(currentLine.c_str());
+          int startIdx = moves.find_first_of("S");
+          moves.erase(startIdx,9);
+          String moveString = "";
+          for (char c : moves){
+            moveString += c;
+          }
+          Serial.println("MOVES ARE: " + moveString);
+        }
+
+        if (currentLine.endsWith("POST /move HTTP/1.1")) {
+          Serial.println(currentLine);
+            
+          msg_size = strlen("HTTP/1.1 200 OK");
+          client.println(msg_size);
+          client.println("HTTP/1.1 200 OK");
+        }
+
+        if (currentLine.endsWith("SENTMOVE")) {
+          std::string moves = std::string(currentLine.c_str());
+          int startIdx = moves.find_first_of("S");
+          moves.erase(startIdx,8);
+          String moveString = "";
+          for (char c : moves){
+            moveString += c;
+          }
+          Serial.println("MOVE IS: " + moveString);
+        }
+        
       }
     }
     // close the connection:

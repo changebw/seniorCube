@@ -2,8 +2,23 @@
 
 .LearnPage {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     visibility: visible;
     margin-top: 10px;
     justify-content: center;
+    align-items: center;
+}
+
+.instruction-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
+    text-align: center;
+    align-items: center;
+}
+
+.btnHolder {
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
 }

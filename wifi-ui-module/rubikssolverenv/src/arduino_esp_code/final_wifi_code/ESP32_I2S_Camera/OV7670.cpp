@@ -118,7 +118,7 @@ void OV7670::QQVGARGB565()
   frameControl(196, 52, 8, 488); //no clue why horizontal needs such strange values, vertical works ok
   
   //i2c.writeRegister(ADDR, REG_COM10, 0x02); //VSYNC negative
-  //i2c.writeRegister(ADDR, REG_MVFP, 0x2b);  //mirror flip
+  i2c.writeRegister(ADDR, REG_MVFP, 0x2b);  //mirror flip
 
   i2c.writeRegister(ADDR, 0xb0, 0x84);// no clue what this is but it's most important for colors
   saturation(0);
@@ -140,7 +140,7 @@ void OV7670::QQQVGARGB565()
   
   frameControl(196, 52, 8, 488); //no clue why horizontal needs such strange values, vertical works ok
   
-  //i2c.writeRegister(ADDR, REG_MVFP, 0x2b);  //mirror flip
+  i2c.writeRegister(ADDR, REG_MVFP, 0x2b);  //mirror flip
    
   i2c.writeRegister(ADDR, 0xb0, 0x84);// no clue what this is but it's most important for colors
   saturation(0);

@@ -32,7 +32,9 @@ urlpatterns = [
     path("startTimerConnection", startTimerConnection),
     # path("closeConnection", closeConnection),
     # path("takeNewPicture", takeNewPicture),
-    path("getTime", getTime)
+    path("getTime", getTime),
+    path("startLearnModeConnection", startLearnModeConnection),
+    path("sendMove", sendMove)
 ]
 
 if settings.DEBUG:

@@ -68,20 +68,34 @@ def send_scramble(conn: socket.socket, moves: str):
             time.sleep(1)
         conn.close()
 
-def send_solve(conn):
+def send_solve(conn, moves):
     if conn != "err":
-        conn.send("solve\0".encode())
+        conn.send("POST /solve HTTP/1.1\r\n".encode())
+        print("send req")
+        response_size = conn.recv(2) # size
+        response = conn.recv(17)
+        print("RESPONSE IS: " + str(response))
+        if b'HTTP/1.1 200 OK' in response:
+            print("good response")
+            move_string = moves + "SENTSOLVE\r\n"
+            print(move_string)
+            conn.send(move_string.encode())
+            time.sleep(1)
         conn.close()
 
-def send_learn_solve(conn: socket.socket, moves: str):
+def send_move(conn: socket.socket, move: str):
     if conn != "err":
-        while len(moves) > 0:
-            try: 
-                conn.send(moves[0].encode())
-            except TimeoutError or OSError:
-                print("SEND FAILED! exiting..")
-                break
-            moves = moves[1:]
+        conn.send("POST /move HTTP/1.1\r\n".encode())
+        print("send req")
+        response_size = conn.recv(2) # size
+        response = conn.recv(25)
+        print("RESPONSE IS: " + str(response))
+        if b'HTTP/1.1 200 OK' in response:
+            print("good response")
+            move_string = move + "SENTSOLVE\r\n"
+            print(move_string)
+            conn.send(move_string.encode())
+            time.sleep(1)
 
 def receiveTextViaSocket(conn):
     encoded = conn.recv(20)
@@ -136,12 +150,23 @@ def listen_for_image(conn):
     
     return bytes_data
 
-def convert_and_save_image(byte_data):
+def convert_and_save_image1(byte_data):
     byte_stream = BytesIO(byte_data)
     now = datetime.now()
     try:
         image = Image.open(byte_stream)
-        image.save(f"./djangoproj/media/output{now}.bmp", format="BMP")
+        # image.save(f"./djangoproj/media/output{now}.bmp", format="BMP")
+        image.save(f"./djangoproj/CV/topview.bmp", format="BMP")
+    except Exception as e:
+        print("Error processing image:", e)
+
+def convert_and_save_image2(byte_data):
+    byte_stream = BytesIO(byte_data)
+    now = datetime.now()
+    try:
+        image = Image.open(byte_stream)
+        # image.save(f"./djangoproj/media/output{now}.bmp", format="BMP")
+        image.save(f"./djangoproj/CV/botview.bmp", format="BMP")
     except Exception as e:
         print("Error processing image:", e)
 

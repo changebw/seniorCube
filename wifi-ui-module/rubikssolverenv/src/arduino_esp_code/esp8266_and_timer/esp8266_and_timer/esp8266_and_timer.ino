@@ -9,7 +9,7 @@ SoftwareSerial espSerial(2,3);
 
 // SSID AND PASS FOR WIFI
 #define ssid "XXX"
-#define PASSWORD "XXX"
+#define PASSWORD "XXXX"
 
 String fmsg;
 String msg;
@@ -96,7 +96,7 @@ void loop() {
       timing = false;
 
       display.showNumberDecEx(displayValue * 100 + hundredths, 0b01000000, true); // Display final time with hundredths of a second
-      delay(3000); // Wait for 4 seconds
+      delay(1000); // 
       // Reset the display to zero
       display.showNumberDecEx(0, 0b01000000, true);
     }
