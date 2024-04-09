@@ -2,7 +2,7 @@
     display: grid;
     height: 5vh;
     width: 100%;
-    grid-template-columns: repeat(4, 25%);
+    grid-template-columns: repeat(3, 33.3%);
 }
 
 .NavbarLink {

@@ -7,10 +7,13 @@ import serial,time
 from djangoproj.CV.colorByFace import *
 from djangoproj.Cube import Cube
 
+# Renders the SPA.
 def index(request):
     csrf_token = get_token(request)
     return render(request, 'index.html', {'csrf_token': csrf_token})
 
+# Calls scramble algorithm from Algorithms module and sends to ESP32.
+# Used for Scramble and Solve Modes.
 def sendScramble(request):
 
     # CONNECT TO ESP32 MOTOR CONTROLLER
@@ -19,14 +22,21 @@ def sendScramble(request):
     # CALL BRADEN's SCRAMBLE ALGORITHM
     cube = Cube()
     cube.printCube()
-    moves = cube.randomScramble(20)
+    global scrambleMoves
+    scrambleMoves = cube.randomScramble(20)
     
     # SEND STRING DATA for scramble algorithm and DISCONNECT
-    send_scramble(conn, moves)
+    send_scramble(conn, scrambleMoves)
 
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
 
+# Sends commands to ESP32 that controls cam1, then cam2 to take pictures of the cube. 
+# CV algorithm is run on received images.
+# Give CV output to Algorithms module to generate solve string.
+# Send solve string to ESP32 that controls motors.
+# Used for Solve Mode.
 def sendSolve(request):
+    
     # CONNECT TO ESP32 CAM 1
     conn = make_connection("cam1")
 
@@ -80,6 +90,8 @@ def sendSolve(request):
 
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
 
+# Starts the connection with the ESP32 that controls the speed timer.
+# Used for Race Mode.
 def startTimerConnection(request):
     global timerConn
     timerConn = make_connection("timer")
@@ -90,6 +102,8 @@ def startTimerConnection(request):
         status = 200 # OK
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""",status=status)
 
+# Gets the time from the speed timer.
+# Used for Race Mode.
 def getTime(request):
     rec_data = listen_for_time(timerConn)#user's time received from esp8266-01
 
@@ -102,6 +116,29 @@ def getTime(request):
         }
         return JsonResponse(data,status=200)
 
+# Calls scramble algorithm from Algorithms module and sends to client and ESP32.
+# Used for Learning Mode and Race Modes.
+def getScramble(request):
+
+    # CONNECT TO ESP32 MOTOR CONTROLLER
+    conn = make_connection("cam1")
+    
+    # CALL BRADEN's SCRAMBLE ALGORITHM
+    cube = Cube()
+    cube.printCube()
+    global scrambleMoves
+    scrambleMoves = cube.randomScramble(20)
+    
+    # SEND STRING DATA for scramble algorithm and DISCONNECT
+    send_scramble(conn, scrambleMoves)
+
+    return JsonResponse({
+        'scrambleMoves': scrambleMoves
+    })
+
+# Runs sendSolve steps but does not send solve string to the ESP32 motors.
+# Sends solveString to client to step through at their own pace.
+# Used for Learning Mode.
 def startLearnModeConnection(request):
     print("called start learn mode")
     # CONNECT TO ESP32 CAM 1
@@ -177,8 +214,8 @@ def startLearnModeConnection(request):
             curr_move = "Invalid Move"
 
     data = {
-            'moves': solveString,
-            'curr_move': curr_move
+            'solveMoves': solveString,
+            'currSolveMove': curr_move
         }
 
     # CONNECT TO MOTORS
@@ -195,6 +232,7 @@ def startLearnModeConnection(request):
     
     return JsonResponse(data,status=200)
 
+# Sends a single move to the ESP32 that controls the motors, used for Learning Mode.
 def sendMove(request):
 
     global solveString
@@ -239,8 +277,8 @@ def sendMove(request):
 
     if next_move is not None:
         data = {
-                'moves': solveString,
-                'curr_move': next_move
+                'solveMoves': solveString,
+                'currSolveMove': next_move
             }
     else:
         data = {}

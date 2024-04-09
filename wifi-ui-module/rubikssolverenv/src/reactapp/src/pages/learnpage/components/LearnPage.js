@@ -5,9 +5,31 @@ class LearnPage extends React.Component{
     constructor(props) {
       super(props);
       this.state = {
-        moves: "",
-        curr_move: "",
+        solveMoves: "",
+        currSolveMove: "",
+        scrambleMoves: "",
+        currScrambleMove: "",
       };
+    }
+
+    scrambleSetup = () => {
+      fetch('/getScramble')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed with not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          this.setState({
+            scrambleMoves: data.scrambleMoves
+          })
+          let msg = document.getElementById('msg-to-user');
+          msg.textContent = data.scrambleMoves;
+        })
+        .catch(error => {
+          console.log("Error fetching data",error);
+        });
     }
 
     // startLearnModeConnection Takes pictures with cam1, cam2, and starts continuous connection with motors ESP.
@@ -22,8 +44,8 @@ class LearnPage extends React.Component{
         })
         .then(data => {
           this.setState({
-            moves: data.moves,
-            curr_move: data.curr_move,
+            solveMoves: data.solveMoves,
+            currSolveMove: data.currSolveMove,
           });
         })
         .catch(error => {
@@ -42,8 +64,8 @@ class LearnPage extends React.Component{
         })
         .then(data => {
           this.setState({
-            moves: data.moves,
-            curr_move: data.curr_move,
+            solveMoves: data.solveMoves,
+            currSolveMove: data.currSolveMove,
           });
         })
         .catch(error => {
@@ -54,14 +76,22 @@ class LearnPage extends React.Component{
     render() { 
       return <div id="LearnPage" className="LearnPage">
           <div className="instruction-container">
-            <h1 className="instruction">Move String:</h1>
-            <h2 id="move-string">{this.state.moves}</h2>
+            <h1 className="instruction">Scramble String:</h1>
+            <h2 id="move-string">{this.state.scrambleMoves}</h2>
+          </div>
+          <div className="instruction-container">
+            <h1 className="instruction">Solve String:</h1>
+            <h2 id="move-string">{this.state.solveMoves}</h2>
           </div>
           <div>
-            <h1>Current move:</h1>
-            <h1>{this.state.curr_move}</h1>
+            <h1>Current solve move:</h1>
+            <h1>{this.state.currSolveMove}</h1>
           </div>
           <div className="btnHolder">
+            <button 
+              id="btn-get-scramble"
+              onClick={this.scrambleSetup}
+            >Get scramble</button>
             <button 
               id="btn-start-learn"
               onClick={this.startLearnConn}

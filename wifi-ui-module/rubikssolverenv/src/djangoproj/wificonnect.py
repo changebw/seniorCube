@@ -19,7 +19,7 @@ from datetime import datetime
         port = 80
     ESP8266 (esp_id = "timer")
         ip = '172.20.10.6'
-        port = 8080
+        port = 80
 
 |==================================|    
 '''
@@ -34,9 +34,10 @@ def make_connection(esp_id: str) -> socket.socket:
         port = 80
     elif esp_id == "motors":
         ip = '172.20.10.7'
+        port = 80
     else:
         ip = '172.20.10.6'
-        port = 8080
+        port = 80
     
     conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -173,17 +174,24 @@ def convert_and_save_image2(byte_data):
 def listen_for_time(conn):
     conn.send("GET /time\r\n".encode())
 
-    encoded = ""
+    # msg_size = ""
 
-    try: 
-        encoded = conn.recv(8)
-    except (OSError,TimeoutError) as e:
-        encoded = "err"
+    # try: 
+    #     msg_size = conn.recv(2)
+    # except (OSError,TimeoutError) as e:
+    #     msg_size = "err"
+    
+    # if msg_size != "err":
+    #     msg_size = msg_size.decode('utf-8')
     
     msg = "error"
+    encoded_msg = ""
+    try:
+        encoded_msg = conn.recv(100)
+    except (OSError,TimeoutError) as e:
+        encoded_msg = "err"
     
-    if encoded != "err":
-        msg = encoded.decode('utf-8')
+    msg = encoded_msg.decode('utf-8')
     
     print("Received msg: ", msg)
     return msg

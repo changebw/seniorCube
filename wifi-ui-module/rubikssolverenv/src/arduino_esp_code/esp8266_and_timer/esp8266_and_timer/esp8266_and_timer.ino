@@ -15,7 +15,7 @@ String fmsg;
 String msg;
 String response;
 String cmd;
-String sendString = "0:00";
+String sendString = "00:00";
 
 TM1637Display display(CLK_PIN, DIO_PIN);
 

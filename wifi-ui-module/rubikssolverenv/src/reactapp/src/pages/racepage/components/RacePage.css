@@ -9,6 +9,14 @@
     justify-content: center;
     gap: 30px;
 }
+.RacePage h1 {
+    line-height: 0;
+}
+
+#titletext-container {
+    display: flex;
+    flex-direction: column;
+}
 
 .plotsContainer {
     display: flex;

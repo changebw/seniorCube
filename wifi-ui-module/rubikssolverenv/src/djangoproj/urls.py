@@ -27,6 +27,7 @@ urlpatterns = [
     path('race', index, name='index'),
     path('learn', index, name='index'),
     path("sendScramble", sendScramble),
+    path("getScramble", getScramble),
     path("sendSolve", sendSolve),
     # path("makeConnection/<int:esp_id>/", makeConnection),
     path("startTimerConnection", startTimerConnection),
