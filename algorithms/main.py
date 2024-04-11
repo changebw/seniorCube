@@ -5,7 +5,7 @@ import time
 from Cube import Cube
 from solver import IDA_star, build_heuristic_db
 
-MAX_MOVES = 6
+MAX_MOVES = 5
 NEW_HEURISTICS = True
 HEURISTIC_FILE = 'heuristic.json'
 
