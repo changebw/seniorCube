@@ -27,7 +27,7 @@ class SolvePage extends React.Component {
         }
     }
     render() { return <div id="SolvePage" className="SolvePage">
-                        <div className="ButtonContainer">
+                        <div className="solve-btns-container">
                         <form id="sendScramble" className="connForm" action="" onSubmit={this.handleSubmit}>
                             <button id="ScrambleButton">
                               <h2>Scramble</h2>
@@ -38,11 +38,6 @@ class SolvePage extends React.Component {
                               <h2>Solve</h2>
                             </button>
                           </form>
-                          {/* <form id="takeNewPicture" className="connForm" action="" onSubmit={this.handleSubmit}>
-                            <button id="PicButton">
-                              <h2>Get pic</h2>
-                            </button>
-                          </form> */}
                         </div>
                       </div>
     }

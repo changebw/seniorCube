@@ -28,6 +28,7 @@ from datetime import datetime
 def make_connection(esp_id: str) -> socket.socket:
     if esp_id == "cam1":
         ip = '172.20.10.9'
+        # ip = '192.168.1.215'
         port = 80
     elif esp_id == "cam2":
         ip = '172.20.10.10'
@@ -156,8 +157,8 @@ def convert_and_save_image1(byte_data):
     now = datetime.now()
     try:
         image = Image.open(byte_stream)
-        # image.save(f"./djangoproj/media/output{now}.bmp", format="BMP")
-        image.save(f"./djangoproj/CV/topview.bmp", format="BMP")
+        image.save(f"./djangoproj/media/output{now}.bmp", format="BMP")
+        # image.save(f"./djangoproj/CV/topview.bmp", format="BMP")
     except Exception as e:
         print("Error processing image:", e)
 
@@ -166,8 +167,8 @@ def convert_and_save_image2(byte_data):
     now = datetime.now()
     try:
         image = Image.open(byte_stream)
-        # image.save(f"./djangoproj/media/output{now}.bmp", format="BMP")
-        image.save(f"./djangoproj/CV/botview.bmp", format="BMP")
+        image.save(f"./djangoproj/media/output{now}.bmp", format="BMP")
+        # image.save(f"./djangoproj/CV/botview.bmp", format="BMP")
     except Exception as e:
         print("Error processing image:", e)
 

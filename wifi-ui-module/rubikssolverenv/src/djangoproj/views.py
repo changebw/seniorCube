@@ -17,7 +17,7 @@ def index(request):
 def sendScramble(request):
 
     # CONNECT TO ESP32 MOTOR CONTROLLER
-    conn = make_connection("cam1")#TODO: change to motors later
+    conn = make_connection("motors")#TODO: change to motors later
     
     # CALL BRADEN's SCRAMBLE ALGORITHM
     cube = Cube()

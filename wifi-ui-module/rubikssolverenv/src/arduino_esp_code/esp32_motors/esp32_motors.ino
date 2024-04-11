@@ -131,6 +131,39 @@ void serve() {
             moveString += c;
           }
           Serial.println("MOVES ARE: " + moveString);
+          for (int i = 0; i < moveString.length(); i++){
+            if (moveString[i] == 'L'){
+              rotateMotor(1, 90);
+            }
+            else if (moveString[i] == 'l'){
+              rotateMotor(1, -90);
+            }
+            else if (moveString[i] == 'R'){
+              rotateMotor(2, 90);
+            }
+            else if (moveString[i] == 'r'){
+              rotateMotor(2, -90);
+            }
+            else if (moveString[i] == 'F'){
+              rotateMotor(3, 90);
+            }
+            else if (moveString[i] == 'f'){
+              rotateMotor(3, -90);
+            }
+            else if (moveString[i] == 'B'){
+              rotateMotor(4, 90);
+            }
+            else if (moveString[i] == 'b'){
+              rotateMotor(4, -90);
+            }
+            else if (moveString[i] == 'D'  moveString[i] == 'U'){
+              rotateMotor(5, 90);
+            }
+            else if (moveString[i] == 'd'  moveString[i] == 'u'){
+              rotateMotor(5, -90);
+            }
+            delay(2000);
+          }
         }
         
         if (currentLine.endsWith("POST /solve HTTP/1.1")) {
@@ -150,6 +183,39 @@ void serve() {
             moveString += c;
           }
           Serial.println("MOVES ARE: " + moveString);
+          for (int i = 0; i < moveString.length(); i++){
+            if (moveString[i] == 'L'){
+              rotateMotor(1, 90);
+            }
+            else if (moveString[i] == 'l'){
+              rotateMotor(1, -90);
+            }
+            else if (moveString[i] == 'R'){
+              rotateMotor(2, 90);
+            }
+            else if (moveString[i] == 'r'){
+              rotateMotor(2, -90);
+            }
+            else if (moveString[i] == 'F'){
+              rotateMotor(3, 90);
+            }
+            else if (moveString[i] == 'f'){
+              rotateMotor(3, -90);
+            }
+            else if (moveString[i] == 'B'){
+              rotateMotor(4, 90);
+            }
+            else if (moveString[i] == 'b'){
+              rotateMotor(4, -90);
+            }
+            else if (moveString[i] == 'D' || moveString[i] == 'U'){
+              rotateMotor(5, 90);
+            }
+            else if (moveString[i] == 'd' ||  moveString[i] == 'u'){
+              rotateMotor(5, -90);
+            }
+            delay(2000);
+          }
         }
 
         if (currentLine.endsWith("POST /move HTTP/1.1")) {

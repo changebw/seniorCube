@@ -1,6 +1,12 @@
 import React from "react";
 import "./RacePage.css"
 
+let hour = 0;
+let minute = 0;
+let second = 0;
+let count = 0;
+let timer = false;
+
 class RacePage extends React.Component {
   constructor(props) {
     super(props);
@@ -9,6 +15,7 @@ class RacePage extends React.Component {
       yourTime: "00:00",
       robotTime: "00:00",
     };
+    this.stopWatch = this.stopWatch.bind(this);
   }
 
   componentDidMount() {
@@ -43,12 +50,64 @@ class RacePage extends React.Component {
   startFetch = () => {
     console.log("called start fetch");
     fetch('/sendSolve');
-    setTimeout(function(){
+    setTimeout(() => {
       fetch('/startTimerConnection');
       this.interval = setInterval(this.fetchData, 900);
-    }, 10000);
+      timer = true;
+      this.stopWatch();
+    }, 2000);
     let msg = document.getElementById('scramble-string');
     msg.textContent = "Place hands on sensors and release to start timer";
+  }
+
+  stopWatch = () => { 
+    if (timer) { 
+        count++; 
+  
+        if (count === 100) { 
+            second++; 
+            count = 0; 
+        } 
+  
+        if (second === 60) { 
+            minute++; 
+            second = 0; 
+        } 
+  
+        if (minute === 60) { 
+            hour++; 
+            minute = 0; 
+            second = 0; 
+        } 
+  
+        let hrString = hour; 
+        let minString = minute; 
+        let secString = second; 
+        let countString = count; 
+  
+        if (hour < 10) { 
+            hrString = "0" + hrString; 
+        } 
+  
+        if (minute < 10) { 
+            minString = "0" + minString; 
+        } 
+  
+        if (second < 10) { 
+            secString = "0" + secString; 
+        } 
+  
+        if (count < 10) { 
+            countString = "0" + countString; 
+        } 
+  
+        // document.getElementById('hr').innerHTML = hrString; 
+        // document.getElementById('min').innerHTML = minString; 
+        // document.getElementById('sec').innerHTML = secString; 
+        // document.getElementById('count').innerHTML = countString;
+        console.log(hour + " " + minute + " " + second); 
+        setTimeout(this.stopWatch, 10); 
+    } 
   }
 
   fetchData = () => {
