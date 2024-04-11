@@ -177,9 +177,9 @@ class Cube:
             elif x[0] == 'h':
                 if x[1] == 0:
                     if x[2] == 0:
-                        solve += 'U'
+                        solve += "RLFFBBrlDRLFFBBrl"
                     else:
-                        solve += 'u'
+                        solve += "RLFFBBrldRLFFBBrl"
                 else:
                     if x[2] == 0:
                         solve += 'd'
